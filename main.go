@@ -1,20 +1,45 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"os"
 
 	"github.com/ben-lehman/gorss/internal/config"
 )
+
+type State struct {
+	cfg *config.Config
+}
+
 func main() {
-  conf, err := config.Read()
-  if err != nil {
-    fmt.Printf("Error: %v\n", err)
+	conf, err := config.Read()
+	if err != nil {
+    log.Fatalf("Error reading config file: %v", err)
+	}
+	state := State{
+		cfg: &conf,
+	}
+
+	commands := commands{
+		registeredCommands: make(map[string]func(*State, command) error),
+	}
+
+  commands.register("login", handlerLogin)
+
+  args := os.Args
+  if len(args) < 2 {
+    log.Fatal("Usage: cli <command> [args...]")
+    return
   }
-  conf.SetUser("ben")
-  conf, err = config.Read()
-  if err != nil {
-    fmt.Printf("Error: %v\n", err)
+
+  command := command{
+    name: args[1],
+    args: args[2:],
   }
-  fmt.Printf("db url: %v\ncurrent user: %v\n", conf.DbURL, conf.CurrentUsername)
-  return
+  
+  err = commands.run(&state, command)
+  if err != nil {
+    log.Fatal(err)
+  }
+	return
 }

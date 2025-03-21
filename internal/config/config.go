@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-const configFileName = "/.gorssconfig.json"
+const configFileName = "/.gatorconfig.json"
 
 type Config struct {
 	DbURL           string `json:"db_url"`
