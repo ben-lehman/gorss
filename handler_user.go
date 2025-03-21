@@ -53,6 +53,22 @@ func handlerRegister(state *State, cmd command) error {
   return nil 
 }
 
+func handlerUsers(state *State, cmd command) error {
+  users, err := state.db.GetUsers(context.Background())
+  if err != nil {
+    return err
+  }
+  currentUser := state.cfg.CurrentUsername
+  for _, u := range users {
+    s := fmt.Sprintf("* %s", u.Name)
+    if u.Name == currentUser {
+      s += " (current)"
+    }
+    fmt.Println(s)
+  }
+  return nil
+}
+
 func handlerReset(state *State, cmd command) error {
   err := state.db.DeleteUsers(context.Background())
   if err != nil {
