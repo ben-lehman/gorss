@@ -11,7 +11,7 @@ import (
 )
 
 type State struct {
-  db *database.Queries
+	db  *database.Queries
 	cfg *config.Config
 }
 
@@ -25,11 +25,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-  defer db.Close()
+	defer db.Close()
+
 	dbQueries := database.New(db)
-  
 	state := State{
-    db: dbQueries,
+		db:  dbQueries,
 		cfg: &conf,
 	}
 	commands := commands{
@@ -37,7 +37,8 @@ func main() {
 	}
 
 	commands.register("login", handlerLogin)
-  commands.register("register", handlerRegister)
+	commands.register("register", handlerRegister)
+  commands.register("reset", handlerReset)
 
 	args := os.Args
 	if len(args) < 2 {
