@@ -41,3 +41,17 @@ func handlerFollow(state *State, cmd command) error {
 
   return nil
 }
+
+func handlerFollowing(state *State, cmd command) error {
+  username := state.cfg.CurrentUsername
+  feed_follows, err := state.db.GetFeedFollowsForUser(context.Background(), username)
+  if err != nil {
+    return err
+  }
+
+  for _, feed_follow := range feed_follows {
+    fmt.Println(feed_follow.FeedName)
+  }
+
+  return nil
+}
