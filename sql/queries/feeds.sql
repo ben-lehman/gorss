@@ -13,8 +13,3 @@ RETURNING *;
 -- name: GetFeeds :many
 SELECT * FROM feeds;
 
--- name: GetFeedUserName :one
-SELECT users.name FROM feeds
-JOIN users
-ON feeds.user_id = users.id
-WHERE feeds.id = $1;

@@ -46,13 +46,13 @@ func handlerFeeds(state *State, _ command) error {
   }
 
   for _, feed := range feeds {
-    feedUsername, err := state.db.GetFeedUserName(context.Background(), feed.ID)
+    feedUser, err := state.db.GetUserById(context.Background(), feed.UserID)
     if err != nil {
       return fmt.Errorf("Unable to get user name tied to feed: %v", err)
     } 
     fmt.Printf("name: %s\n", feed.Name)
     fmt.Printf("url: %s\n", feed.Url)
-    fmt.Printf("user id: %s\n", feedUsername)
+    fmt.Printf("user id: %s\n", feedUser.Name)
   }
 
   return nil
