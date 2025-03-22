@@ -39,6 +39,25 @@ func handlerAddFeed(state *State, cmd command) error {
   return nil
 }
 
+func handlerFeeds(state *State, _ command) error {
+  feeds, err := state.db.GetFeeds(context.Background())
+  if err != nil {
+    return fmt.Errorf("Unable to get feeds: %v", err)
+  }
+
+  for _, feed := range feeds {
+    feedUsername, err := state.db.GetFeedUserName(context.Background(), feed.ID)
+    if err != nil {
+      return fmt.Errorf("Unable to get user name tied to feed: %v", err)
+    } 
+    fmt.Printf("name: %s\n", feed.Name)
+    fmt.Printf("url: %s\n", feed.Url)
+    fmt.Printf("user id: %s\n", feedUsername)
+  }
+
+  return nil
+}
+
 func handlerAggregate(state *State, cmd command) error {
   feed, err := rssFeed.FetchFeed(context.Background(), "https://www.wagslane.dev/index.xml")
   if err != nil {
