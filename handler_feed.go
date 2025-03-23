@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/ben-lehman/gorss/internal/database"
-	"github.com/ben-lehman/gorss/internal/rssFeed"
 	"github.com/google/uuid"
 )
 
@@ -32,17 +31,17 @@ func handlerAddFeed(state *State, cmd command, user database.User) error {
 	}
 
 	_, err = state.db.CreateFeedFollow(
-    context.Background(),
-    database.CreateFeedFollowParams{
-      ID: uuid.New(),
-      CreatedAt: time.Now(),
-      UpdatedAt: time.Now(),
-      UserID: user.ID,
-      FeedID: feed.ID,
-    })
-  if err != nil {
-    return err
-  }
+		context.Background(),
+		database.CreateFeedFollowParams{
+			ID:        uuid.New(),
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+			UserID:    user.ID,
+			FeedID:    feed.ID,
+		})
+	if err != nil {
+		return err
+	}
 
 	printFeed(feed)
 
@@ -60,26 +59,14 @@ func handlerFeeds(state *State, _ command) error {
 		if err != nil {
 			return fmt.Errorf("Unable to get user name tied to feed: %v", err)
 		}
-		fmt.Printf("name: %s\n", feed.Name)
-		fmt.Printf("url: %s\n", feed.Url)
-		fmt.Printf("user id: %s\n", feedUser.Name)
+		printFeed(feed)
+		fmt.Printf("user Name: %s\n", feedUser.Name)
 	}
 
-	return nil
-}
-
-func handlerAggregate(state *State, cmd command) error {
-	feed, err := rssFeed.FetchFeed(context.Background(), "https://www.wagslane.dev/index.xml")
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(feed)
 	return nil
 }
 
 func printFeed(feed database.Feed) {
 	fmt.Printf("id: %v\ncreated at: %v\n updated at:%v\n", feed.ID, feed.CreatedAt, feed.UpdatedAt)
 	fmt.Printf("name: %v\n url:%v\n user id:%v\n", feed.Name, feed.Url, feed.UserID)
-
 }
