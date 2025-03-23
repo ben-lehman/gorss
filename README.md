@@ -3,8 +3,8 @@
 This repo is for personal education purposes to get some practice creating a command line utility in go and does not provide an elegant user experience.
 
 ## Requirements
-(go)[https://go.dev/doc/install] 1.24
-(postgres)[https://www.postgresql.org/download/] 16.8
+[go](https://go.dev/doc/install)1.24
+[postgres](https://www.postgresql.org/download/) 16.8
 
 ## Installation
 
